@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import com.awwakum.android.stockportfolio.models.Stock
 import timber.log.Timber
 
-class StockListAdapter : RecyclerView.Adapter<VmViewHolder>(), IBaseListAdapter<Stock> {
+class StockListAdapter(private val clickListener: (Stock) -> Unit) : RecyclerView.Adapter<VmViewHolder>(), IBaseListAdapter<Stock> {
 
     private var mItems = ArrayList<Stock>()
     override fun getItemCount() = mItems.size
@@ -27,6 +27,9 @@ class StockListAdapter : RecyclerView.Adapter<VmViewHolder>(), IBaseListAdapter<
         Timber.d("BR.stock: %s, mItems[position]: %s", BR.stock, mItems[position])
         holder.binding.setVariable(BR.stock, mItems[position])
         holder.binding.executePendingBindings()
+        // Populate ViewHolder with data that corresponds to the position in the list
+        // which we are told to load
+        holder.bind(mItems[position], clickListener)
     }
 
     override fun add(newItem: Stock) {
